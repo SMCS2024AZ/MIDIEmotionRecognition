@@ -1,7 +1,7 @@
 """Implements classes to extract static and sequential features from MIDI files.
 """
 
-from music21 import converter, instrument, note
+from music21 import converter, instrument, note, tempo
 import numpy as np
 
 class NoteFeatures:
@@ -88,6 +88,8 @@ class FeatureExtractor:
 
     def get_melody_sequence(self):
         """Represents the MIDI's melody as a list of NoteFeature objects.
+        TODO: Refine this to extract a more accurate melody (e.g. take top notes from chords,
+        ignore notes that are pitched too low, etc.)
 
         Returns:
             list: List of NoteFeature objects representing the MIDI clip's melody.
@@ -95,7 +97,7 @@ class FeatureExtractor:
         notes = []
         prev_start = self.get_first_note_offset()
 
-        for event in self.stream:
+        for event in self.stream.notes:
             if isinstance(event, note.Note):
                 start = self.get_event_offset(event)
                 notes.append(NoteFeatures(event.pitch.midi,
@@ -106,8 +108,32 @@ class FeatureExtractor:
         return notes
 
 
+    def get_key(self):
+        """Gets estimated key of MIDI clip.
+
+        Returns:
+            str: Estimated key of MIDI clip.
+        """
+        return self.midi.analyze("key").name
+
+
+    def get_tempo(self):
+        """Gets tempo of MIDI.
+        
+        Returns:
+            float: MIDI tempo in BPM.
+        """
+        for event in self.stream:
+            if isinstance(event, tempo.MetronomeMark):
+                return event.getQuarterBPM()
+        return None
+
+
+
 if __name__ == "__main__":
     extractor = FeatureExtractor("test_midi.mid")
-    for note in extractor.get_melody_sequence():
-        print(note)
+    print(extractor.get_tempo())
+    #for note in extractor.get_melody_sequence():
+        #print(note)
+    print(extractor.get_key())
     
