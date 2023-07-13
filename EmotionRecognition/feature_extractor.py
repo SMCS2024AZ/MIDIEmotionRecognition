@@ -131,8 +131,8 @@ class FeatureExtractor:
 
 
 if __name__ == "__main__":
-    extractor = FeatureExtractor("test_midi.mid")
+    extractor = FeatureExtractor("EmotionRecognition/test_midi.mid")
     print(extractor.get_tempo())
-    #for note in extractor.get_melody_sequence():
-        #print(note)
+    for note in extractor.get_melody_sequence():
+        print(note)
     print(extractor.get_key())
