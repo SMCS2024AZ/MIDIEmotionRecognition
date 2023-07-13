@@ -136,4 +136,3 @@ if __name__ == "__main__":
     #for note in extractor.get_melody_sequence():
         #print(note)
     print(extractor.get_key())
-    
