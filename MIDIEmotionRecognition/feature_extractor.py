@@ -5,7 +5,7 @@ from music21 import converter, instrument, note, roman, common
 import numpy as np
 
 
-MAX_CHORD_SIZE = 10
+MAX_CHORD_SIZE = 8
 
 
 def normalize_pitch(pitch):
@@ -76,7 +76,7 @@ class ChordFeatures:
 
 
     def vectorize(self):
-        """Represents chord as an 14-dimensional numpy array.  Pitches are normalized.
+        """Represents chord as an 12-dimensional numpy array.  Pitches are normalized.
 
         Returns:
             numpy.array: Numpy array containing normalized chord pitches, roman numeral function,
@@ -101,12 +101,15 @@ class FeatureExtractor:
         parts (music21.stream.base.Score): MIDI parts/instruments.
         piano (music21.stream.base.Part): MIDI piano part/instrument.
         stream (music21.stream.iterator.RecursiveIterator): Stream of music21 objects.
+        console (rich.console.Console): Console to print progress/errors to.
     """
-    def __init__(self, filename):
+    def __init__(self, filename, console, logger):
         self.midi = converter.parse(filename)
         self.parts = instrument.partitionByInstrument(self.midi)
         self.piano = self.parts.parts[0]
         self.stream = self.piano.recurse()
+        self.console = console
+        self.logger = logger
 
 
     def get_key(self):
@@ -145,10 +148,8 @@ class FeatureExtractor:
         return None
 
 
-    def get_melody_sequence(self):
+    def get_melody_seq(self):
         """Represents the MIDI's melody as a numpy array of vectors.
-        TODO: Refine this to extract a more accurate melody (e.g. take top notes from chords,
-        ignore notes that are pitched too low, etc.)
 
         Returns:
             list: Numpy array of vectors representing the MIDI clip's melody.
@@ -167,7 +168,7 @@ class FeatureExtractor:
         return np.array(notes)
 
 
-    def get_harmony_sequence(self):
+    def get_harmony_seq(self):
         """Represents the MIDI's harmony as a numpy array of vectors.
 
         Returns:
@@ -178,16 +179,15 @@ class FeatureExtractor:
 
         for chord in chords.recurse().getElementsByClass("Chord"):
             numeral = roman.romanNumeralFromChord(chord, self.get_key())
-            harmony.append(ChordFeatures(chord.pitches,
+            temp = ChordFeatures(chord.pitches,
                                          MAX_CHORD_SIZE - len(chord.pitches),
                                          numeral.romanNumeralAlone,
                                          numeral.frontAlterationAccidental,
                                          numeral.quality,
-                                         numeral.inversion()).vectorize())
+                                         numeral.inversion()).vectorize()
+            if len(temp) != MAX_CHORD_SIZE + 4:
+                self.console.log(f"[bold red]ERROR: Invalid length of chord vector ({len(temp)})")
+                self.logger.error("Invalid length of chord vector")
+            else:
+                harmony.append(temp)
         return np.array(harmony)
-
-
-if __name__ == "__main__":
-    extractor = FeatureExtractor("MIDIEmotionRecognition/test_midi.mid")
-    print(extractor.get_melody_sequence())
-    print(extractor.get_harmony_sequence())
