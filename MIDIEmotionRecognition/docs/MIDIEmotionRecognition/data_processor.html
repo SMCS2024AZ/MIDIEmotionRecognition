@@ -1,0 +1,911 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>MIDIEmotionRecognition.data_processor API documentation</title>
+<meta name="description" content="Implements class to extract and save sequential data, split into
+training, validation, and test sets." />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>MIDIEmotionRecognition.data_processor</code></h1>
+</header>
+<section id="section-intro">
+<p>Implements class to extract and save sequential data, split into
+training, validation, and test sets.</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;Implements class to extract and save sequential data, split into
+training, validation, and test sets.
+&#34;&#34;&#34;
+import os
+import logging
+import pandas as pd
+import numpy as np
+from feature_extractor import FeatureExtractor
+from rich.console import Console
+
+
+class DataProcessor:
+    &#34;&#34;&#34;Class that reads CSV files to obtain MIDI filenames and labels,
+    processes MIDI files, and obtains sequential data separated into
+    training, validation, and test sets.
+    
+    Attributes:
+        dataset (str): Location of primary dataset.
+        split (str): Location of train/test/val split csv files.
+        train (pandas.DataFrame): Pandas dataframe containing songs labeled
+        by arousal-valence emotion quadrant for training.
+        test (pandas.DataFrame): Pandas dataframe containing songs labeled
+        by arousal-valence emotion quadrant for testing.
+        val (pandas.DataFrame): Pandas dataframe containing songs labeled
+        by arousal-valence emotion quadrant for validation.
+        labels (pandas.DataFrame): Pandas dataframe containing midis labeled by
+        arousal-valence emotion quadrant.
+        midi_folder (str): Folder containing midi files.
+        midis (str): Midi filenames within midi_folder.
+        train_seqs (tuple): Training sequences including melody, harmony, and labels.
+        test_seqs (tuple): Testing sequences including melody, harmony, and labels.
+        val_seqs (tuple): Validation sequences including melody, harmony, and labels.
+        console (rich.console.Console): Rich text console.
+        logger (logging.Logger): Logger for log messages.
+    &#34;&#34;&#34;
+    def __init__(self, data):
+        self.dataset = data
+        self.split = os.path.join(self.dataset, &#34;split&#34;)
+        self.train = pd.read_csv(os.path.join(self.split, &#34;train_SL.csv&#34;))
+        self.test = pd.read_csv(os.path.join(self.split, &#34;test_SL.csv&#34;))
+        self.val = pd.read_csv(os.path.join(self.split, &#34;val_SL.csv&#34;))
+        self.labels = pd.read_csv(os.path.join(self.dataset, &#34;label.csv&#34;))
+        self.midi_folder = os.path.join(self.dataset, &#34;midis&#34;)
+        self.midis = os.listdir(os.path.join(self.dataset, &#34;midis&#34;))
+        self.train_seqs = self.test_seqs = self.val_seqs = ()
+        self.console = Console(record=True)
+        logging.basicConfig(filename=os.path.join(&#34;MIDIEmotionRecognition&#34;,
+                                                  &#34;logs&#34;,
+                                                  &#34;data_processing.log&#34;),
+                        format=&#34;%(asctime)s %(message)s&#34;,
+                        filemode=&#34;w&#34;)
+        self.logger = logging.getLogger()
+        self.logger.setLevel(logging.DEBUG)
+
+
+    def select_by_category(self, category, values):
+        &#34;&#34;&#34;Select a dataset by category.
+
+        Args:
+            category (str): Dataset category (train, test, val).
+            values (list): List of return values.
+
+        Raises:
+            ValueError: Category must be train, test, or val.
+
+        Returns:
+            any: Depends on types contained in values list.
+        &#34;&#34;&#34;
+        if category == &#34;train&#34;:
+            return values[0]
+        elif category == &#34;test&#34;:
+            return values[1]
+        elif category == &#34;val&#34;:
+            return values[2]
+        else:
+            raise ValueError(&#34;Category must be train, test, or val.&#34;)
+
+
+    def set_seqs_by_category(self, category, new_value):
+        &#34;&#34;&#34;Set sequence to new value.
+
+        Args:
+            category (str): Dataset category (train, test, val).
+            new_value (any): New value to set sequence to.
+
+        Raises:
+            ValueError: Category must be train, test, or val.
+        &#34;&#34;&#34;
+        if category == &#34;train&#34;:
+            self.train_seqs = new_value
+        elif category == &#34;test&#34;:
+            self.test_seqs = new_value
+        elif category == &#34;val&#34;:
+            self.val_seqs = new_value
+        else:
+            raise ValueError(&#34;Category must be train, test, or val.&#34;)
+
+
+    def get_dataset_by_category(self, category):
+        &#34;&#34;&#34;Get dataset by given category (train, test, val)
+
+        Args:
+            category (str): Dataset category (train, test, val).
+
+        Returns:
+            pandas.DataFrame: Pandas dataframe containing songs labeled by arousal-valence
+            emotion quadrant.
+        &#34;&#34;&#34;
+        return self.select_by_category(category,
+                                    [self.train, self.test, self.val])
+
+
+    def get_seqs_by_category(self, category):
+        &#34;&#34;&#34;Get dataset sequences by given category (train, test, val)
+
+        Args:
+            category (str): Dataset category (train, test, val).
+
+        Returns:
+            tuple: Dataset tuple (training sequences, testing sequences, validaiton sequences).
+        &#34;&#34;&#34;
+        return self.select_by_category(category,
+                                    [self.train_seqs, self.test_seqs, self.val_seqs])
+
+
+    def get_songs_and_labels(self, dataset):
+        &#34;&#34;&#34;Gets list of song IDs and emotion labels.
+
+        Args:
+            dataset (pandas.DataFrame): Pandas dataframe containing songs labeled by arousal-valence
+            emotion quadrant.
+
+        Returns:
+            tuple: Tuple containing list of slong IDs and list of labels.
+        &#34;&#34;&#34;
+        return dataset[&#39;songID&#39;].tolist(), dataset[&#39;DominantQ&#39;].tolist()
+
+
+    def get_song_midis(self, song, song_label):
+        &#34;&#34;&#34;Get midis of a song based on the song and its label.
+
+        Args:
+            song (str): Name of a song.
+            song_label (str): Song&#39;s arousal-valence emotion label.
+
+        Returns:
+            list: List of midi filenames from given song.
+        &#34;&#34;&#34;
+        prefix = f&#39;Q{song_label}_{song}&#39;
+        return [midi for midi in self.midis if midi.startswith(prefix)]
+
+
+    def get_midi_seqs(self, midis):
+        &#34;&#34;&#34;Extract melody, harmony, and labels from midis.
+
+        Args:
+            midis (list): List of midi filenames.
+
+        Returns:
+            tuple: Tuple with melody sequences, harmony sequences, and labels.
+        &#34;&#34;&#34;
+        melody_seqs = harmony_seqs = seq_labels = []
+        for midi in midis:
+            extractor = FeatureExtractor(os.path.join(self.midi_folder, midi),
+                                         self.console,
+                                         self.logger)
+            melody_seqs.append(extractor.get_melody_seq())
+            harmony_seqs.append(extractor.get_harmony_seq())
+            seq_labels.append(self.labels.loc[midi[:-4]])
+        return (melody_seqs, harmony_seqs, seq_labels)
+
+
+    def prepare_dataset(self, category):
+        &#34;&#34;&#34;Get all melodies, harmonies, and labels from given dataset split category.
+
+        Args:
+            category (str): Dataset category (train, test, val).
+        &#34;&#34;&#34;
+        dataset = self.get_dataset_by_category(category)
+
+        self.labels.set_index(&#34;ID&#34;, inplace = True)
+        songs, song_labels = self.get_songs_and_labels(dataset)
+        melody_seqs = harmony_seqs = seq_labels = []
+        length = len(dataset)
+
+        with self.console.status(f&#34;Preparing dataset \&#34;{category}\&#34;&#34;, spinner=&#34;line&#34;):
+            for i in range(length):
+                song, song_label = songs[i], song_labels[i]
+                message = f&#34;Extracting MIDI data for {song}...&#34;
+                self.console.log(message)
+                self.logger.info(message)
+                song_midis = self.get_song_midis(song, song_label)
+                midi_seqs = self.get_midi_seqs(song_midis)
+                melody_seqs.extend(midi_seqs[0])
+                harmony_seqs.extend(midi_seqs[1])
+                seq_labels.extend(midi_seqs[2])
+                self.console.log(f&#34;[bold green]Done! ({i + 1}/{length})&#34;)
+                self.logger.info(&#34;Success ({%d}/{%d})&#34;, i + 1, length)
+        self.console.print(f&#34;[bold green]Dataset \&#34;{category}\&#34; prepared successfully!&#34;)
+
+        self.set_seqs_by_category(category,
+                                (np.array(melody_seqs),
+                                 np.array(harmony_seqs),
+                                 np.array(seq_labels)))
+
+
+    def save_training_data(self, data_directory, category):
+        &#34;&#34;&#34;Save training data as csv file.
+
+        Args:
+            data_directory (str): Directory in which to save data.
+            category (str): Dataset category (train, test, val).
+        &#34;&#34;&#34;
+        names = [f&#34;{category}_melody_seqs.csv&#34;,
+                 f&#34;{category}_harmony_seqs.csv&#34;,
+                 f&#34;{category}_labels.csv&#34;]
+        for i, name in enumerate(names):
+            np.savetxt(os.path.join(data_directory, name),
+                       self.get_seqs_by_category(category)[i],
+                       delimiter=&#34;,&#34;)
+
+
+if __name__ == &#34;__main__&#34;:
+    processor = DataProcessor(&#34;EMOPIA_1.0&#34;)
+    processor.prepare_dataset(&#34;train&#34;)
+    data_dir = os.path.join(&#34;MIDIEmotionRecognition&#34;, &#34;data&#34;)
+    processor.save_training_data(data_dir, &#34;train&#34;)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="MIDIEmotionRecognition.data_processor.DataProcessor"><code class="flex name class">
+<span>class <span class="ident">DataProcessor</span></span>
+<span>(</span><span>data)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Class that reads CSV files to obtain MIDI filenames and labels,
+processes MIDI files, and obtains sequential data separated into
+training, validation, and test sets.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>dataset</code></strong> :&ensp;<code>str</code></dt>
+<dd>Location of primary dataset.</dd>
+<dt><strong><code>split</code></strong> :&ensp;<code>str</code></dt>
+<dd>Location of train/test/val split csv files.</dd>
+<dt><strong><code>train</code></strong> :&ensp;<code>pandas.DataFrame</code></dt>
+<dd>Pandas dataframe containing songs labeled</dd>
+<dt>by arousal-valence emotion quadrant for training.</dt>
+<dt><strong><code>test</code></strong> :&ensp;<code>pandas.DataFrame</code></dt>
+<dd>Pandas dataframe containing songs labeled</dd>
+<dt>by arousal-valence emotion quadrant for testing.</dt>
+<dt><strong><code>val</code></strong> :&ensp;<code>pandas.DataFrame</code></dt>
+<dd>Pandas dataframe containing songs labeled</dd>
+<dt>by arousal-valence emotion quadrant for validation.</dt>
+<dt><strong><code>labels</code></strong> :&ensp;<code>pandas.DataFrame</code></dt>
+<dd>Pandas dataframe containing midis labeled by</dd>
+<dt>arousal-valence emotion quadrant.</dt>
+<dt><strong><code>midi_folder</code></strong> :&ensp;<code>str</code></dt>
+<dd>Folder containing midi files.</dd>
+<dt><strong><code>midis</code></strong> :&ensp;<code>str</code></dt>
+<dd>Midi filenames within midi_folder.</dd>
+<dt><strong><code>train_seqs</code></strong> :&ensp;<code>tuple</code></dt>
+<dd>Training sequences including melody, harmony, and labels.</dd>
+<dt><strong><code>test_seqs</code></strong> :&ensp;<code>tuple</code></dt>
+<dd>Testing sequences including melody, harmony, and labels.</dd>
+<dt><strong><code>val_seqs</code></strong> :&ensp;<code>tuple</code></dt>
+<dd>Validation sequences including melody, harmony, and labels.</dd>
+<dt><strong><code>console</code></strong> :&ensp;<code>rich.console.Console</code></dt>
+<dd>Rich text console.</dd>
+<dt><strong><code>logger</code></strong> :&ensp;<code>logging.Logger</code></dt>
+<dd>Logger for log messages.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DataProcessor:
+    &#34;&#34;&#34;Class that reads CSV files to obtain MIDI filenames and labels,
+    processes MIDI files, and obtains sequential data separated into
+    training, validation, and test sets.
+    
+    Attributes:
+        dataset (str): Location of primary dataset.
+        split (str): Location of train/test/val split csv files.
+        train (pandas.DataFrame): Pandas dataframe containing songs labeled
+        by arousal-valence emotion quadrant for training.
+        test (pandas.DataFrame): Pandas dataframe containing songs labeled
+        by arousal-valence emotion quadrant for testing.
+        val (pandas.DataFrame): Pandas dataframe containing songs labeled
+        by arousal-valence emotion quadrant for validation.
+        labels (pandas.DataFrame): Pandas dataframe containing midis labeled by
+        arousal-valence emotion quadrant.
+        midi_folder (str): Folder containing midi files.
+        midis (str): Midi filenames within midi_folder.
+        train_seqs (tuple): Training sequences including melody, harmony, and labels.
+        test_seqs (tuple): Testing sequences including melody, harmony, and labels.
+        val_seqs (tuple): Validation sequences including melody, harmony, and labels.
+        console (rich.console.Console): Rich text console.
+        logger (logging.Logger): Logger for log messages.
+    &#34;&#34;&#34;
+    def __init__(self, data):
+        self.dataset = data
+        self.split = os.path.join(self.dataset, &#34;split&#34;)
+        self.train = pd.read_csv(os.path.join(self.split, &#34;train_SL.csv&#34;))
+        self.test = pd.read_csv(os.path.join(self.split, &#34;test_SL.csv&#34;))
+        self.val = pd.read_csv(os.path.join(self.split, &#34;val_SL.csv&#34;))
+        self.labels = pd.read_csv(os.path.join(self.dataset, &#34;label.csv&#34;))
+        self.midi_folder = os.path.join(self.dataset, &#34;midis&#34;)
+        self.midis = os.listdir(os.path.join(self.dataset, &#34;midis&#34;))
+        self.train_seqs = self.test_seqs = self.val_seqs = ()
+        self.console = Console(record=True)
+        logging.basicConfig(filename=os.path.join(&#34;MIDIEmotionRecognition&#34;,
+                                                  &#34;logs&#34;,
+                                                  &#34;data_processing.log&#34;),
+                        format=&#34;%(asctime)s %(message)s&#34;,
+                        filemode=&#34;w&#34;)
+        self.logger = logging.getLogger()
+        self.logger.setLevel(logging.DEBUG)
+
+
+    def select_by_category(self, category, values):
+        &#34;&#34;&#34;Select a dataset by category.
+
+        Args:
+            category (str): Dataset category (train, test, val).
+            values (list): List of return values.
+
+        Raises:
+            ValueError: Category must be train, test, or val.
+
+        Returns:
+            any: Depends on types contained in values list.
+        &#34;&#34;&#34;
+        if category == &#34;train&#34;:
+            return values[0]
+        elif category == &#34;test&#34;:
+            return values[1]
+        elif category == &#34;val&#34;:
+            return values[2]
+        else:
+            raise ValueError(&#34;Category must be train, test, or val.&#34;)
+
+
+    def set_seqs_by_category(self, category, new_value):
+        &#34;&#34;&#34;Set sequence to new value.
+
+        Args:
+            category (str): Dataset category (train, test, val).
+            new_value (any): New value to set sequence to.
+
+        Raises:
+            ValueError: Category must be train, test, or val.
+        &#34;&#34;&#34;
+        if category == &#34;train&#34;:
+            self.train_seqs = new_value
+        elif category == &#34;test&#34;:
+            self.test_seqs = new_value
+        elif category == &#34;val&#34;:
+            self.val_seqs = new_value
+        else:
+            raise ValueError(&#34;Category must be train, test, or val.&#34;)
+
+
+    def get_dataset_by_category(self, category):
+        &#34;&#34;&#34;Get dataset by given category (train, test, val)
+
+        Args:
+            category (str): Dataset category (train, test, val).
+
+        Returns:
+            pandas.DataFrame: Pandas dataframe containing songs labeled by arousal-valence
+            emotion quadrant.
+        &#34;&#34;&#34;
+        return self.select_by_category(category,
+                                    [self.train, self.test, self.val])
+
+
+    def get_seqs_by_category(self, category):
+        &#34;&#34;&#34;Get dataset sequences by given category (train, test, val)
+
+        Args:
+            category (str): Dataset category (train, test, val).
+
+        Returns:
+            tuple: Dataset tuple (training sequences, testing sequences, validaiton sequences).
+        &#34;&#34;&#34;
+        return self.select_by_category(category,
+                                    [self.train_seqs, self.test_seqs, self.val_seqs])
+
+
+    def get_songs_and_labels(self, dataset):
+        &#34;&#34;&#34;Gets list of song IDs and emotion labels.
+
+        Args:
+            dataset (pandas.DataFrame): Pandas dataframe containing songs labeled by arousal-valence
+            emotion quadrant.
+
+        Returns:
+            tuple: Tuple containing list of slong IDs and list of labels.
+        &#34;&#34;&#34;
+        return dataset[&#39;songID&#39;].tolist(), dataset[&#39;DominantQ&#39;].tolist()
+
+
+    def get_song_midis(self, song, song_label):
+        &#34;&#34;&#34;Get midis of a song based on the song and its label.
+
+        Args:
+            song (str): Name of a song.
+            song_label (str): Song&#39;s arousal-valence emotion label.
+
+        Returns:
+            list: List of midi filenames from given song.
+        &#34;&#34;&#34;
+        prefix = f&#39;Q{song_label}_{song}&#39;
+        return [midi for midi in self.midis if midi.startswith(prefix)]
+
+
+    def get_midi_seqs(self, midis):
+        &#34;&#34;&#34;Extract melody, harmony, and labels from midis.
+
+        Args:
+            midis (list): List of midi filenames.
+
+        Returns:
+            tuple: Tuple with melody sequences, harmony sequences, and labels.
+        &#34;&#34;&#34;
+        melody_seqs = harmony_seqs = seq_labels = []
+        for midi in midis:
+            extractor = FeatureExtractor(os.path.join(self.midi_folder, midi),
+                                         self.console,
+                                         self.logger)
+            melody_seqs.append(extractor.get_melody_seq())
+            harmony_seqs.append(extractor.get_harmony_seq())
+            seq_labels.append(self.labels.loc[midi[:-4]])
+        return (melody_seqs, harmony_seqs, seq_labels)
+
+
+    def prepare_dataset(self, category):
+        &#34;&#34;&#34;Get all melodies, harmonies, and labels from given dataset split category.
+
+        Args:
+            category (str): Dataset category (train, test, val).
+        &#34;&#34;&#34;
+        dataset = self.get_dataset_by_category(category)
+
+        self.labels.set_index(&#34;ID&#34;, inplace = True)
+        songs, song_labels = self.get_songs_and_labels(dataset)
+        melody_seqs = harmony_seqs = seq_labels = []
+        length = len(dataset)
+
+        with self.console.status(f&#34;Preparing dataset \&#34;{category}\&#34;&#34;, spinner=&#34;line&#34;):
+            for i in range(length):
+                song, song_label = songs[i], song_labels[i]
+                message = f&#34;Extracting MIDI data for {song}...&#34;
+                self.console.log(message)
+                self.logger.info(message)
+                song_midis = self.get_song_midis(song, song_label)
+                midi_seqs = self.get_midi_seqs(song_midis)
+                melody_seqs.extend(midi_seqs[0])
+                harmony_seqs.extend(midi_seqs[1])
+                seq_labels.extend(midi_seqs[2])
+                self.console.log(f&#34;[bold green]Done! ({i + 1}/{length})&#34;)
+                self.logger.info(&#34;Success ({%d}/{%d})&#34;, i + 1, length)
+        self.console.print(f&#34;[bold green]Dataset \&#34;{category}\&#34; prepared successfully!&#34;)
+
+        self.set_seqs_by_category(category,
+                                (np.array(melody_seqs),
+                                 np.array(harmony_seqs),
+                                 np.array(seq_labels)))
+
+
+    def save_training_data(self, data_directory, category):
+        &#34;&#34;&#34;Save training data as csv file.
+
+        Args:
+            data_directory (str): Directory in which to save data.
+            category (str): Dataset category (train, test, val).
+        &#34;&#34;&#34;
+        names = [f&#34;{category}_melody_seqs.csv&#34;,
+                 f&#34;{category}_harmony_seqs.csv&#34;,
+                 f&#34;{category}_labels.csv&#34;]
+        for i, name in enumerate(names):
+            np.savetxt(os.path.join(data_directory, name),
+                       self.get_seqs_by_category(category)[i],
+                       delimiter=&#34;,&#34;)</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="MIDIEmotionRecognition.data_processor.DataProcessor.get_dataset_by_category"><code class="name flex">
+<span>def <span class="ident">get_dataset_by_category</span></span>(<span>self, category)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Get dataset by given category (train, test, val)</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>category</code></strong> :&ensp;<code>str</code></dt>
+<dd>Dataset category (train, test, val).</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>pandas.DataFrame</code></dt>
+<dd>Pandas dataframe containing songs labeled by arousal-valence</dd>
+</dl>
+<p>emotion quadrant.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_dataset_by_category(self, category):
+    &#34;&#34;&#34;Get dataset by given category (train, test, val)
+
+    Args:
+        category (str): Dataset category (train, test, val).
+
+    Returns:
+        pandas.DataFrame: Pandas dataframe containing songs labeled by arousal-valence
+        emotion quadrant.
+    &#34;&#34;&#34;
+    return self.select_by_category(category,
+                                [self.train, self.test, self.val])</code></pre>
+</details>
+</dd>
+<dt id="MIDIEmotionRecognition.data_processor.DataProcessor.get_midi_seqs"><code class="name flex">
+<span>def <span class="ident">get_midi_seqs</span></span>(<span>self, midis)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Extract melody, harmony, and labels from midis.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>midis</code></strong> :&ensp;<code>list</code></dt>
+<dd>List of midi filenames.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>tuple</code></dt>
+<dd>Tuple with melody sequences, harmony sequences, and labels.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_midi_seqs(self, midis):
+    &#34;&#34;&#34;Extract melody, harmony, and labels from midis.
+
+    Args:
+        midis (list): List of midi filenames.
+
+    Returns:
+        tuple: Tuple with melody sequences, harmony sequences, and labels.
+    &#34;&#34;&#34;
+    melody_seqs = harmony_seqs = seq_labels = []
+    for midi in midis:
+        extractor = FeatureExtractor(os.path.join(self.midi_folder, midi),
+                                     self.console,
+                                     self.logger)
+        melody_seqs.append(extractor.get_melody_seq())
+        harmony_seqs.append(extractor.get_harmony_seq())
+        seq_labels.append(self.labels.loc[midi[:-4]])
+    return (melody_seqs, harmony_seqs, seq_labels)</code></pre>
+</details>
+</dd>
+<dt id="MIDIEmotionRecognition.data_processor.DataProcessor.get_seqs_by_category"><code class="name flex">
+<span>def <span class="ident">get_seqs_by_category</span></span>(<span>self, category)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Get dataset sequences by given category (train, test, val)</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>category</code></strong> :&ensp;<code>str</code></dt>
+<dd>Dataset category (train, test, val).</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>tuple</code></dt>
+<dd>Dataset tuple (training sequences, testing sequences, validaiton sequences).</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_seqs_by_category(self, category):
+    &#34;&#34;&#34;Get dataset sequences by given category (train, test, val)
+
+    Args:
+        category (str): Dataset category (train, test, val).
+
+    Returns:
+        tuple: Dataset tuple (training sequences, testing sequences, validaiton sequences).
+    &#34;&#34;&#34;
+    return self.select_by_category(category,
+                                [self.train_seqs, self.test_seqs, self.val_seqs])</code></pre>
+</details>
+</dd>
+<dt id="MIDIEmotionRecognition.data_processor.DataProcessor.get_song_midis"><code class="name flex">
+<span>def <span class="ident">get_song_midis</span></span>(<span>self, song, song_label)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Get midis of a song based on the song and its label.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>song</code></strong> :&ensp;<code>str</code></dt>
+<dd>Name of a song.</dd>
+<dt><strong><code>song_label</code></strong> :&ensp;<code>str</code></dt>
+<dd>Song's arousal-valence emotion label.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>list</code></dt>
+<dd>List of midi filenames from given song.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_song_midis(self, song, song_label):
+    &#34;&#34;&#34;Get midis of a song based on the song and its label.
+
+    Args:
+        song (str): Name of a song.
+        song_label (str): Song&#39;s arousal-valence emotion label.
+
+    Returns:
+        list: List of midi filenames from given song.
+    &#34;&#34;&#34;
+    prefix = f&#39;Q{song_label}_{song}&#39;
+    return [midi for midi in self.midis if midi.startswith(prefix)]</code></pre>
+</details>
+</dd>
+<dt id="MIDIEmotionRecognition.data_processor.DataProcessor.get_songs_and_labels"><code class="name flex">
+<span>def <span class="ident">get_songs_and_labels</span></span>(<span>self, dataset)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Gets list of song IDs and emotion labels.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>dataset</code></strong> :&ensp;<code>pandas.DataFrame</code></dt>
+<dd>Pandas dataframe containing songs labeled by arousal-valence</dd>
+</dl>
+<p>emotion quadrant.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>tuple</code></dt>
+<dd>Tuple containing list of slong IDs and list of labels.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_songs_and_labels(self, dataset):
+    &#34;&#34;&#34;Gets list of song IDs and emotion labels.
+
+    Args:
+        dataset (pandas.DataFrame): Pandas dataframe containing songs labeled by arousal-valence
+        emotion quadrant.
+
+    Returns:
+        tuple: Tuple containing list of slong IDs and list of labels.
+    &#34;&#34;&#34;
+    return dataset[&#39;songID&#39;].tolist(), dataset[&#39;DominantQ&#39;].tolist()</code></pre>
+</details>
+</dd>
+<dt id="MIDIEmotionRecognition.data_processor.DataProcessor.prepare_dataset"><code class="name flex">
+<span>def <span class="ident">prepare_dataset</span></span>(<span>self, category)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Get all melodies, harmonies, and labels from given dataset split category.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>category</code></strong> :&ensp;<code>str</code></dt>
+<dd>Dataset category (train, test, val).</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def prepare_dataset(self, category):
+    &#34;&#34;&#34;Get all melodies, harmonies, and labels from given dataset split category.
+
+    Args:
+        category (str): Dataset category (train, test, val).
+    &#34;&#34;&#34;
+    dataset = self.get_dataset_by_category(category)
+
+    self.labels.set_index(&#34;ID&#34;, inplace = True)
+    songs, song_labels = self.get_songs_and_labels(dataset)
+    melody_seqs = harmony_seqs = seq_labels = []
+    length = len(dataset)
+
+    with self.console.status(f&#34;Preparing dataset \&#34;{category}\&#34;&#34;, spinner=&#34;line&#34;):
+        for i in range(length):
+            song, song_label = songs[i], song_labels[i]
+            message = f&#34;Extracting MIDI data for {song}...&#34;
+            self.console.log(message)
+            self.logger.info(message)
+            song_midis = self.get_song_midis(song, song_label)
+            midi_seqs = self.get_midi_seqs(song_midis)
+            melody_seqs.extend(midi_seqs[0])
+            harmony_seqs.extend(midi_seqs[1])
+            seq_labels.extend(midi_seqs[2])
+            self.console.log(f&#34;[bold green]Done! ({i + 1}/{length})&#34;)
+            self.logger.info(&#34;Success ({%d}/{%d})&#34;, i + 1, length)
+    self.console.print(f&#34;[bold green]Dataset \&#34;{category}\&#34; prepared successfully!&#34;)
+
+    self.set_seqs_by_category(category,
+                            (np.array(melody_seqs),
+                             np.array(harmony_seqs),
+                             np.array(seq_labels)))</code></pre>
+</details>
+</dd>
+<dt id="MIDIEmotionRecognition.data_processor.DataProcessor.save_training_data"><code class="name flex">
+<span>def <span class="ident">save_training_data</span></span>(<span>self, data_directory, category)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Save training data as csv file.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>data_directory</code></strong> :&ensp;<code>str</code></dt>
+<dd>Directory in which to save data.</dd>
+<dt><strong><code>category</code></strong> :&ensp;<code>str</code></dt>
+<dd>Dataset category (train, test, val).</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def save_training_data(self, data_directory, category):
+    &#34;&#34;&#34;Save training data as csv file.
+
+    Args:
+        data_directory (str): Directory in which to save data.
+        category (str): Dataset category (train, test, val).
+    &#34;&#34;&#34;
+    names = [f&#34;{category}_melody_seqs.csv&#34;,
+             f&#34;{category}_harmony_seqs.csv&#34;,
+             f&#34;{category}_labels.csv&#34;]
+    for i, name in enumerate(names):
+        np.savetxt(os.path.join(data_directory, name),
+                   self.get_seqs_by_category(category)[i],
+                   delimiter=&#34;,&#34;)</code></pre>
+</details>
+</dd>
+<dt id="MIDIEmotionRecognition.data_processor.DataProcessor.select_by_category"><code class="name flex">
+<span>def <span class="ident">select_by_category</span></span>(<span>self, category, values)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Select a dataset by category.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>category</code></strong> :&ensp;<code>str</code></dt>
+<dd>Dataset category (train, test, val).</dd>
+<dt><strong><code>values</code></strong> :&ensp;<code>list</code></dt>
+<dd>List of return values.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>ValueError</code></dt>
+<dd>Category must be train, test, or val.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>any</code></dt>
+<dd>Depends on types contained in values list.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def select_by_category(self, category, values):
+    &#34;&#34;&#34;Select a dataset by category.
+
+    Args:
+        category (str): Dataset category (train, test, val).
+        values (list): List of return values.
+
+    Raises:
+        ValueError: Category must be train, test, or val.
+
+    Returns:
+        any: Depends on types contained in values list.
+    &#34;&#34;&#34;
+    if category == &#34;train&#34;:
+        return values[0]
+    elif category == &#34;test&#34;:
+        return values[1]
+    elif category == &#34;val&#34;:
+        return values[2]
+    else:
+        raise ValueError(&#34;Category must be train, test, or val.&#34;)</code></pre>
+</details>
+</dd>
+<dt id="MIDIEmotionRecognition.data_processor.DataProcessor.set_seqs_by_category"><code class="name flex">
+<span>def <span class="ident">set_seqs_by_category</span></span>(<span>self, category, new_value)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Set sequence to new value.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>category</code></strong> :&ensp;<code>str</code></dt>
+<dd>Dataset category (train, test, val).</dd>
+<dt><strong><code>new_value</code></strong> :&ensp;<code>any</code></dt>
+<dd>New value to set sequence to.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>ValueError</code></dt>
+<dd>Category must be train, test, or val.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_seqs_by_category(self, category, new_value):
+    &#34;&#34;&#34;Set sequence to new value.
+
+    Args:
+        category (str): Dataset category (train, test, val).
+        new_value (any): New value to set sequence to.
+
+    Raises:
+        ValueError: Category must be train, test, or val.
+    &#34;&#34;&#34;
+    if category == &#34;train&#34;:
+        self.train_seqs = new_value
+    elif category == &#34;test&#34;:
+        self.test_seqs = new_value
+    elif category == &#34;val&#34;:
+        self.val_seqs = new_value
+    else:
+        raise ValueError(&#34;Category must be train, test, or val.&#34;)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="MIDIEmotionRecognition" href="index.html">MIDIEmotionRecognition</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="MIDIEmotionRecognition.data_processor.DataProcessor" href="#MIDIEmotionRecognition.data_processor.DataProcessor">DataProcessor</a></code></h4>
+<ul class="">
+<li><code><a title="MIDIEmotionRecognition.data_processor.DataProcessor.get_dataset_by_category" href="#MIDIEmotionRecognition.data_processor.DataProcessor.get_dataset_by_category">get_dataset_by_category</a></code></li>
+<li><code><a title="MIDIEmotionRecognition.data_processor.DataProcessor.get_midi_seqs" href="#MIDIEmotionRecognition.data_processor.DataProcessor.get_midi_seqs">get_midi_seqs</a></code></li>
+<li><code><a title="MIDIEmotionRecognition.data_processor.DataProcessor.get_seqs_by_category" href="#MIDIEmotionRecognition.data_processor.DataProcessor.get_seqs_by_category">get_seqs_by_category</a></code></li>
+<li><code><a title="MIDIEmotionRecognition.data_processor.DataProcessor.get_song_midis" href="#MIDIEmotionRecognition.data_processor.DataProcessor.get_song_midis">get_song_midis</a></code></li>
+<li><code><a title="MIDIEmotionRecognition.data_processor.DataProcessor.get_songs_and_labels" href="#MIDIEmotionRecognition.data_processor.DataProcessor.get_songs_and_labels">get_songs_and_labels</a></code></li>
+<li><code><a title="MIDIEmotionRecognition.data_processor.DataProcessor.prepare_dataset" href="#MIDIEmotionRecognition.data_processor.DataProcessor.prepare_dataset">prepare_dataset</a></code></li>
+<li><code><a title="MIDIEmotionRecognition.data_processor.DataProcessor.save_training_data" href="#MIDIEmotionRecognition.data_processor.DataProcessor.save_training_data">save_training_data</a></code></li>
+<li><code><a title="MIDIEmotionRecognition.data_processor.DataProcessor.select_by_category" href="#MIDIEmotionRecognition.data_processor.DataProcessor.select_by_category">select_by_category</a></code></li>
+<li><code><a title="MIDIEmotionRecognition.data_processor.DataProcessor.set_seqs_by_category" href="#MIDIEmotionRecognition.data_processor.DataProcessor.set_seqs_by_category">set_seqs_by_category</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>
