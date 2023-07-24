@@ -40,7 +40,7 @@ class NoteFeatures:
         Returns:
             numpy.array: Numpy array containing normalized pitch, step, and duration.
         """
-        return np.array([normalize_pitch(self.pitch), self.step, self.duration])
+        return np.array([normalize_pitch(self.pitch), self.step, self.duration], dtype=object)
 
 
 class ChordFeatures:
@@ -48,16 +48,16 @@ class ChordFeatures:
     
     Attributes:
         pitches (list): List of pitches the chord is comprised of.
-        pitches_pad_length (int): How many zeroes to pad when vectorizing pitches.
         function (str): Roman numeral representing function of chord within key.
         accidental (music21.pitch.Accidental): Accidental object representing pitch
         deviation of chord.
         is_major (bool): Whether the chord is major or not.
         Inversion (int): Number representing chord inversion.
     """
-    def __init__(self, pitches, pitches_pad_length, function, accidental, quality, inversion):
+    def __init__(self, pitches, function, accidental, quality, inversion):
         self.pitches = [pitch.midi for pitch in pitches]
-        self.pitches_pad_length = pitches_pad_length
+        self.pitches.extend([0] * (MAX_CHORD_SIZE - 1))
+        self.pitches = self.pitches[0:8]
         self.function = function
         self.accidental = accidental
         self.is_major = quality == "major"
@@ -85,12 +85,11 @@ class ChordFeatures:
         vector = []
         for pitch in self.pitches:
             vector.append(normalize_pitch(pitch))
-        vector.extend([0] * self.pitches_pad_length)
         vector.extend([common.fromRoman(self.function),
                        self.accidental_to_int(),
                        int(self.is_major),
                        self.inversion])
-        return np.array(vector)
+        return np.array(vector, dtype=object)
 
 
 class FeatureExtractor:
@@ -149,10 +148,10 @@ class FeatureExtractor:
 
 
     def get_melody_seq(self):
-        """Represents the MIDI's melody as a numpy array of vectors.
+        """Represents the MIDI's melody as a list of vectors.
 
         Returns:
-            list: Numpy array of vectors representing the MIDI clip's melody.
+            list: List of vectors representing the MIDI clip's melody.
         """
         notes = []
         prev_start = self.get_first_note_offset()
@@ -160,19 +159,24 @@ class FeatureExtractor:
         for event in self.stream.notes:
             if isinstance(event, note.Note):
                 start = self.get_event_offset(event)
-                notes.append(NoteFeatures(event.pitch.midi,
-                                          start - prev_start,
-                                          float(event.duration.quarterLength)).vectorize())
-                prev_start = start
+                temp = NoteFeatures(event.pitch.midi,
+                                    start - prev_start,
+                                    float(event.duration.quarterLength)).vectorize()
+                if len(temp) != 3:
+                    self.console.log(f"[bold red]ERROR: Invalid length of note vector ({len(temp)})")
+                    self.logger.error("Invalid length of note vector")
+                else:
+                    notes.append(temp)
+                    prev_start = start
 
-        return np.array(notes)
+        return notes
 
 
     def get_harmony_seq(self):
-        """Represents the MIDI's harmony as a numpy array of vectors.
+        """Represents the MIDI's harmony as a list of vectors.
 
         Returns:
-            list: Numpy array of vectors representing the MIDI clip's harmony.
+            list: List of vectors representing the MIDI clip's harmony.
         """
         harmony = []
         chords = self.midi.chordify()
@@ -180,14 +184,13 @@ class FeatureExtractor:
         for chord in chords.recurse().getElementsByClass("Chord"):
             numeral = roman.romanNumeralFromChord(chord, self.get_key())
             temp = ChordFeatures(chord.pitches,
-                                         MAX_CHORD_SIZE - len(chord.pitches),
-                                         numeral.romanNumeralAlone,
-                                         numeral.frontAlterationAccidental,
-                                         numeral.quality,
-                                         numeral.inversion()).vectorize()
+                                 numeral.romanNumeralAlone,
+                                 numeral.frontAlterationAccidental,
+                                 numeral.quality,
+                                 numeral.inversion()).vectorize()
             if len(temp) != MAX_CHORD_SIZE + 4:
                 self.console.log(f"[bold red]ERROR: Invalid length of chord vector ({len(temp)})")
                 self.logger.error("Invalid length of chord vector")
             else:
                 harmony.append(temp)
-        return np.array(harmony)
+        return harmony

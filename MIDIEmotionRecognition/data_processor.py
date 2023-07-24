@@ -199,9 +199,9 @@ class DataProcessor:
         self.console.print(f"[bold green]Dataset \"{category}\" prepared successfully!")
 
         self.set_seqs_by_category(category,
-                                (np.array(melody_seqs),
-                                 np.array(harmony_seqs),
-                                 np.array(seq_labels)))
+                                (np.array(melody_seqs, dtype=object),
+                                 np.array(harmony_seqs, dtype=object),
+                                 np.array(seq_labels, dtype=object)))
 
 
     def save_training_data(self, data_directory, category):
@@ -211,13 +211,12 @@ class DataProcessor:
             data_directory (str): Directory in which to save data.
             category (str): Dataset category (train, test, val).
         """
-        names = [f"{category}_melody_seqs.csv",
-                 f"{category}_harmony_seqs.csv",
-                 f"{category}_labels.csv"]
+        names = [f"{category}_melody_seqs.npy",
+                 f"{category}_harmony_seqs.npy",
+                 f"{category}_labels.npy"]
         for i, name in enumerate(names):
-            np.savetxt(os.path.join(data_directory, name),
-                       self.get_seqs_by_category(category)[i],
-                       delimiter=",")
+            np.save(os.path.join(data_directory, name),
+                       self.get_seqs_by_category(category)[i])
 
 
 if __name__ == "__main__":
