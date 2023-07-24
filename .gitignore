@@ -1,3 +1,4 @@
 /MusicMLProject
-**/.DS_Store*
-**/__pycache__*
+.DS_Store
+/MIDIEmotionRecognition/__pycache__
+/MIDIEmotionRecognition/.DS_Store
