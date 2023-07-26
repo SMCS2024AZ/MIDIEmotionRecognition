@@ -161,11 +161,11 @@ class DataProcessor:
         """
         melody_seqs = harmony_seqs = seq_labels = []
         for midi in midis:
-            extractor = FeatureExtractor(os.path.join(self.midi_folder, midi),
+            sequences = FeatureExtractor(os.path.join(self.midi_folder, midi),
                                          self.console,
-                                         self.logger)
-            melody_seqs.append(extractor.get_melody_seq())
-            harmony_seqs.append(extractor.get_harmony_seq())
+                                         self.logger).get_sequences()
+            melody_seqs.append(sequences[0])
+            harmony_seqs.append(sequences[1])
             seq_labels.append(self.labels.loc[midi[:-4]])
         return (melody_seqs, harmony_seqs, seq_labels)
 
@@ -195,7 +195,7 @@ class DataProcessor:
                 harmony_seqs.extend(midi_seqs[1])
                 seq_labels.extend(midi_seqs[2])
                 self.console.log(f"[bold green]Done! ({i + 1}/{length})")
-                self.logger.info("Success ({%d}/{%d})", i + 1, length)
+                self.logger.info("Success (%d/%d)", i + 1, length)
         self.console.print(f"[bold green]Dataset \"{category}\" prepared successfully!")
 
         self.set_seqs_by_category(category,
@@ -211,12 +211,12 @@ class DataProcessor:
             data_directory (str): Directory in which to save data.
             category (str): Dataset category (train, test, val).
         """
-        names = [f"{category}_melody_seqs.npy",
-                 f"{category}_harmony_seqs.npy",
-                 f"{category}_labels.npy"]
+        names = [f"{category}_melody_seqs.csv",
+                 f"{category}_harmony_seqs.csv",
+                 f"{category}_labels.csv"]
         for i, name in enumerate(names):
-            np.save(os.path.join(data_directory, name),
-                       self.get_seqs_by_category(category)[i])
+            np.savetxt(os.path.join(data_directory, name),
+                       self.get_seqs_by_category(category)[i], delimiter=",")
 
 
 if __name__ == "__main__":
