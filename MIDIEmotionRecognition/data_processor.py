@@ -169,7 +169,7 @@ class DataProcessor:
                                          self.logger).get_sequences()
             melody_seqs.append(sequences[0])
             harmony_seqs.append(sequences[1])
-            seq_labels.append(self.labels.loc[midi[:-4]])
+            seq_labels.append(self.labels.loc[midi[:-4]][0])
         return melody_seqs, harmony_seqs, seq_labels
 
 
