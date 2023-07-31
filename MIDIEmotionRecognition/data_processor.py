@@ -2,6 +2,7 @@
 training, validation, and test sets.
 """
 import os
+import pdb
 import logging
 import pandas as pd
 import numpy as np
@@ -159,7 +160,9 @@ class DataProcessor:
         Returns:
             tuple: Tuple with melody sequences, harmony sequences, and labels.
         """
-        melody_seqs = harmony_seqs = seq_labels = []
+        melody_seqs = []
+        harmony_seqs = []
+        seq_labels = []
         for midi in midis:
             sequences = FeatureExtractor(os.path.join(self.midi_folder, midi),
                                          self.console,
@@ -167,7 +170,7 @@ class DataProcessor:
             melody_seqs.append(sequences[0])
             harmony_seqs.append(sequences[1])
             seq_labels.append(self.labels.loc[midi[:-4]])
-        return (melody_seqs, harmony_seqs, seq_labels)
+        return melody_seqs, harmony_seqs, seq_labels
 
 
     def prepare_dataset(self, category):
@@ -180,7 +183,9 @@ class DataProcessor:
 
         self.labels.set_index("ID", inplace = True)
         songs, song_labels = self.get_songs_and_labels(dataset)
-        melody_seqs = harmony_seqs = seq_labels = []
+        melody_seqs = []
+        harmony_seqs = []
+        seq_labels = []
         length = len(dataset)
 
         with self.console.status(f"Preparing dataset \"{category}\"", spinner="line"):
@@ -196,6 +201,7 @@ class DataProcessor:
                 seq_labels.extend(midi_seqs[2])
                 self.console.log(f"[bold green]Done! ({i + 1}/{length})")
                 self.logger.info("Success (%d/%d)", i + 1, length)
+                if i == 2: break # for demonstration purposes
         self.console.print(f"[bold green]Dataset \"{category}\" prepared successfully!")
 
         self.set_seqs_by_category(category,
@@ -216,7 +222,7 @@ class DataProcessor:
                  f"{category}_labels.csv"]
         for i, name in enumerate(names):
             np.savetxt(os.path.join(data_directory, name),
-                       self.get_seqs_by_category(category)[i], delimiter=",")
+                       self.get_seqs_by_category(category)[i], delimiter=",", fmt='%s')
 
 
 if __name__ == "__main__":

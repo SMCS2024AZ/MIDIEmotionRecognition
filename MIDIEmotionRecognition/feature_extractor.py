@@ -1,6 +1,7 @@
 """Implements classes to extract static and sequential features from MIDI files.
 """
 
+import pdb
 from music21 import converter, instrument, note, chord, roman, common
 import numpy as np
 
@@ -22,9 +23,9 @@ def normalize_pitch(pitch):
         pitch (int): MIDI pitch value.
 
     Returns:
-        float: Normalized pitch value between 0 and 1.
+        float: Normalized pitch value between 0 and 11.
     """
-    return pitch / 127
+    return pitch % 12
 
 
 class NoteFeatures:
