@@ -215,26 +215,28 @@ class FeatureExtractor:
                 numeral = roman.romanNumeralFromChord(event, self.get_key())
                 step = start - prev_chord_start
                 duration = float(event.duration.quarterLength)
-                temp_chord = ChordFeatures(event.pitches,
-                                    step,
-                                    duration,
-                                    numeral.romanNumeralAlone,
-                                    numeral.frontAlterationAccidental,
-                                    numeral.quality,
-                                    numeral.inversion()).vectorize()
-                temp_top_note = NoteFeatures(event.pitches[0].midi,
-                                             step,
-                                             duration).vectorize()
-                prev_chord_start = self.validate_vector(temp_chord,
-                                                        MAX_CHORD_SIZE + 6,
-                                                        "chord", harmony,
-                                                        prev_chord_start,
+
+                if numeral.romanNumeralAlone.lower() != "sw":
+                    temp_chord = ChordFeatures(event.pitches,
+                                            step,
+                                            duration,
+                                            numeral.romanNumeralAlone,
+                                            numeral.frontAlterationAccidental,
+                                            numeral.quality,
+                                            numeral.inversion()).vectorize()
+                    temp_top_note = NoteFeatures(event.pitches[0].midi,
+                                                step,
+                                                duration).vectorize()
+                    prev_chord_start = self.validate_vector(temp_chord,
+                                                            MAX_CHORD_SIZE + 6,
+                                                            "chord", harmony,
+                                                            prev_chord_start,
+                                                            start)
+                    prev_note_start = self.validate_vector(temp_top_note,
+                                                        3,
+                                                        "note",
+                                                        notes,
+                                                        prev_note_start,
                                                         start)
-                prev_note_start = self.validate_vector(temp_top_note,
-                                                       3,
-                                                       "note",
-                                                       notes,
-                                                       prev_note_start,
-                                                       start)
 
         return notes, harmony

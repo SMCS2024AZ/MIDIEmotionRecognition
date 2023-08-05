@@ -201,7 +201,6 @@ class DataProcessor:
                 seq_labels.extend(midi_seqs[2])
                 self.console.log(f"[bold green]Done! ({i + 1}/{length})")
                 self.logger.info("Success (%d/%d)", i + 1, length)
-                if i == 2: break # for demonstration purposes
         self.console.print(f"[bold green]Dataset \"{category}\" prepared successfully!")
 
         self.set_seqs_by_category(category,
@@ -227,6 +226,10 @@ class DataProcessor:
 
 if __name__ == "__main__":
     processor = DataProcessor("EMOPIA_1.0")
-    processor.prepare_dataset("train")
     data_dir = os.path.join("MIDIEmotionRecognition", "data")
+    processor.prepare_dataset("train")
     processor.save_training_data(data_dir, "train")
+    processor.prepare_dataset("test")
+    processor.save_training_data(data_dir, "test")
+    processor.prepare_dataset("val")
+    processor.save_training_data(data_dir, "val")
