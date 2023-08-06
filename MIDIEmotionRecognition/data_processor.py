@@ -10,6 +10,11 @@ from feature_extractor import FeatureExtractor
 from rich.console import Console
 
 
+def len_longest_list(nested_lists):
+    lengths = [len(i) for i in nested_lists]
+    return max(lengths)
+
+
 class DataProcessor:
     """Class that reads CSV files to obtain MIDI filenames and labels,
     processes MIDI files, and obtains sequential data separated into
@@ -43,7 +48,9 @@ class DataProcessor:
         self.labels = pd.read_csv(os.path.join(self.dataset, "label.csv"))
         self.midi_folder = os.path.join(self.dataset, "midis")
         self.midis = os.listdir(os.path.join(self.dataset, "midis"))
-        self.train_seqs = self.test_seqs = self.val_seqs = ()
+        self.train_seqs = ()
+        self.test_seqs = ()
+        self.val_seqs = ()
         self.console = Console(record=True)
         logging.basicConfig(filename=os.path.join("MIDIEmotionRecognition",
                                                   "logs",
@@ -173,6 +180,18 @@ class DataProcessor:
         return melody_seqs, harmony_seqs, seq_labels
 
 
+    def pad_sequences(self, sequences, max_len):
+        res = []
+        #max_len = len_longest_list(sequences)
+        zero_vector = [0] * len(sequences[0][0])
+        for sequence in sequences:
+            buffer = sequence
+            for i in range(max_len - len(sequence)):
+                buffer.append(zero_vector)
+            res.append(buffer)
+        return res
+
+
     def prepare_dataset(self, category):
         """Get all melodies, harmonies, and labels from given dataset split category.
 
@@ -204,9 +223,9 @@ class DataProcessor:
         self.console.print(f"[bold green]Dataset \"{category}\" prepared successfully!")
 
         self.set_seqs_by_category(category,
-                                (np.array(melody_seqs, dtype=object),
-                                 np.array(harmony_seqs, dtype=object),
-                                 np.array(seq_labels, dtype=object)))
+                                (np.array(self.pad_sequences(melody_seqs, 857)),
+                                 np.array(self.pad_sequences(harmony_seqs, 413)),
+                                 np.array(seq_labels)))
 
 
     def save_training_data(self, data_directory, category):
@@ -216,20 +235,23 @@ class DataProcessor:
             data_directory (str): Directory in which to save data.
             category (str): Dataset category (train, test, val).
         """
-        names = [f"{category}_melody_seqs.csv",
-                 f"{category}_harmony_seqs.csv",
-                 f"{category}_labels.csv"]
+        names = [f"{category}_melody_seqs.txt",
+                 f"{category}_harmony_seqs.txt",
+                 f"{category}_labels.txt"]
         for i, name in enumerate(names):
+            arr = self.get_seqs_by_category(category)[i]
+            self.logger.info(str(arr.shape))
+            arr_2d = arr.reshape(arr.shape[0], -1)
             np.savetxt(os.path.join(data_directory, name),
-                       self.get_seqs_by_category(category)[i], delimiter=",", fmt='%s')
+                       arr_2d, fmt="%s")
 
 
 if __name__ == "__main__":
     processor = DataProcessor("EMOPIA_1.0")
     data_dir = os.path.join("MIDIEmotionRecognition", "data")
-    processor.prepare_dataset("train")
-    processor.save_training_data(data_dir, "train")
-    processor.prepare_dataset("test")
-    processor.save_training_data(data_dir, "test")
+    #processor.prepare_dataset("train")
+    #processor.save_training_data(data_dir, "train")
+    #processor.prepare_dataset("test")
+    #processor.save_training_data(data_dir, "test")
     processor.prepare_dataset("val")
     processor.save_training_data(data_dir, "val")

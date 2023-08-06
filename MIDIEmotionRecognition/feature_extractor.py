@@ -1,9 +1,8 @@
 """Implements classes to extract static and sequential features from MIDI files.
 """
 
-import pdb
+
 from music21 import converter, instrument, note, chord, roman, common
-import numpy as np
 
 
 MAX_CHORD_SIZE = 8
@@ -43,12 +42,12 @@ class NoteFeatures:
 
 
     def vectorize(self):
-        """Represents note as a three-dimensional numpy array.  Pitch is normalized.
+        """Represents note as a three-dimensional array.  Pitch is normalized.
 
         Returns:
-            numpy.array: Numpy array containing normalized pitch, step, and duration.
+            list: Array containing normalized pitch, step, and duration.
         """
-        return np.array([normalize_pitch(self.pitch), self.step, self.duration], dtype=object)
+        return [normalize_pitch(self.pitch), self.step, self.duration]
 
 
 class ChordFeatures:
@@ -88,10 +87,10 @@ class ChordFeatures:
 
 
     def vectorize(self):
-        """Represents chord as an 12-dimensional numpy array.  Pitches are normalized.
+        """Represents chord as an 12-dimensional array.  Pitches are normalized.
 
         Returns:
-            numpy.array: Numpy array containing normalized chord pitches, roman numeral function,
+            list: Array containing normalized chord pitches, roman numeral function,
             accidental, quality (major or not), and inversion
         """
         vector = []
@@ -103,7 +102,7 @@ class ChordFeatures:
                        self.accidental_to_int(),
                        self.quality,
                        self.inversion])
-        return np.array(vector, dtype=object)
+        return vector
 
 
 class FeatureExtractor:
