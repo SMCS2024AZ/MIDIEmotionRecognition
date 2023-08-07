@@ -16,13 +16,13 @@ CHORD_QUALITIES = {
 
 
 def normalize_pitch(pitch):
-    """Normalize pitch by dividing it by the maximum MIDI value of 127.
+    """Normalize pitch by taking the modulo of the pitch value and 12.
 
     Args:
         pitch (int): MIDI pitch value.
 
     Returns:
-        float: Normalized pitch value between 0 and 11.
+        float: Normalized pitch value between 0 and 11 (pitch class).
     """
     return pitch % 12
 

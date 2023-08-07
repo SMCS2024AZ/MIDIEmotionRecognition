@@ -2,7 +2,6 @@
 training, validation, and test sets.
 """
 import os
-import pdb
 import logging
 import pandas as pd
 import numpy as np
@@ -10,8 +9,16 @@ from feature_extractor import FeatureExtractor
 from rich.console import Console
 
 
-def len_longest_list(nested_lists):
-    lengths = [len(i) for i in nested_lists]
+def len_longest_list(lists):
+    """Get the length of the longest list in a list of lists.
+
+    Args:
+        lists (list): List of lists.
+
+    Returns:
+        int: Length of longest list in given lists.
+    """
+    lengths = [len(i) for i in lists]
     return max(lengths)
 
 
@@ -181,6 +188,15 @@ class DataProcessor:
 
 
     def pad_sequences(self, sequences, max_len):
+        """Pad list of sequences with zeroes to a maximum length.
+
+        Args:
+            sequences (list): List of sequences.
+            max_len (int): Max length of sequences.
+
+        Returns:
+            list: List of padded sequences.
+        """
         res = []
         #max_len = len_longest_list(sequences)
         zero_vector = [0] * len(sequences[0][0])
