@@ -1,4 +1,4 @@
-"""TODO: Implement class that can build, train, and test a model.
+"""Methods that help prepard data and build, train, and test a model.
 Run this in Google Colab to leverage Google's GPUs.
 """
 import os

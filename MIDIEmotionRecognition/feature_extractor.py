@@ -186,7 +186,7 @@ class FeatureExtractor:
             return start
 
 
-    def get_sequences(self):
+    def get_seqs(self):
         """Represents the MIDI's melody as a list of vectors.
 
         Returns:
