@@ -113,5 +113,6 @@ class DataProcessor:
 
 if __name__ == "__main__":
     processor = DataProcessor("EMOPIA_1.0")
-    data_dir = os.path.join("MIDIEmotionRecognition", "data")
-    processor.prepare_dataset(data_dir)
+    data_loc = os.path.join("MIDIEmotionRecognition", "data")
+    processor.prepare_dataset(data_loc)
+ 
